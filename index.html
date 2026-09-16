@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Atividade prática de vídeo interativo com Lumi</title>
+  <meta name="description" content="Roteiro interativo para atividade remota assíncrona de produção de vídeo interativo com Lumi.">
+  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=HMw-Y-q3ZuCtnVwcBVvSO0Fli2s-QLbjqcyZ5lRhbVjbfCvr510ycCEnjiC83EIyVMp_5AvnEPiSY0LGIrc7kvaifg96iQ_21pCybbYH8jKRo7Xrvb68blPElSbBz8rtBzp4Q8k7alZm_L8LYBe35716Ykn14PQXLQRJMlwcI_QAs1uE5CKQXcA2vSmziwFeKphOVWcQWdXzqIGtAoc85tPKdpEpdrURTF59FJn9BTLIDG7qratNj8MDoSNYwor-x0Q2hIJBt4I2a8yzkrD6sfBJjZaWIaqV0J4mJzgJAgbXh2hIPbMkE3e4LqxpLOpJBbSYJC5vLKxOiITUQPkYmTNR_0MY5t3qci7sFmFIsXA" charset="UTF-8"></script><style>
+    :root {
+      --navy: #173f68;
+      --navy-2: #245a88;
+      --blue-50: #eef5fb;
+      --blue-100: #dceaf6;
+      --gold: #d6a635;
+      --ink: #1d2732;
+      --muted: #5c6875;
+      --line: #cfd8e1;
+      --paper: #ffffff;
+      --canvas: #f3f6f8;
+      --success: #1f7a52;
+      --warning: #8a5b00;
+      --radius: 14px;
+      --shadow: 0 12px 32px rgba(24, 52, 79, .10);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    a { color: #075ca8; text-underline-offset: 3px; }
+    a:hover { color: #003f75; }
+    button, input, textarea { font: inherit; }
+    button, input, textarea, summary, a { outline-offset: 3px; }
+    :focus-visible { outline: 3px solid #ffbf47; }
+    .skip-link {
+      position: fixed; left: 1rem; top: -5rem; z-index: 100;
+      padding: .7rem 1rem; background: #fff; color: #000; border-radius: 8px;
+    }
+    .skip-link:focus { top: 1rem; }
+
+    .hero {
+      color: #fff;
+      background: linear-gradient(135deg, #102f50 0%, var(--navy) 55%, #2a658f 100%);
+      padding: 2.2rem 1.25rem 2.6rem;
+    }
+    .hero-inner, .shell { width: min(1120px, 100%); margin: 0 auto; }
+    .eyebrow { margin: 0 0 .7rem; font-size: .82rem; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; opacity: .9; }
+    h1 { max-width: 850px; margin: 0; font-size: clamp(2rem, 5vw, 3.6rem); line-height: 1.08; letter-spacing: -.03em; }
+    .subtitle { max-width: 780px; margin: 1rem 0 0; font-size: clamp(1rem, 2vw, 1.25rem); color: #e7f1fa; }
+    .author { margin: .55rem 0 0; color: #fff; font-weight: 750; }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.4rem; }
+    .pill { padding: .4rem .75rem; border: 1px solid rgba(255,255,255,.35); border-radius: 999px; background: rgba(255,255,255,.1); font-size: .92rem; }
+
+    .progress-wrap {
+      position: sticky; top: 0; z-index: 20; color: #fff; background: #0d2945;
+      box-shadow: 0 5px 18px rgba(0,0,0,.15);
+    }
+    .progress-inner { width: min(1120px, 100%); margin: 0 auto; padding: .7rem 1.25rem; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .8rem; }
+    .progress-label { font-size: .88rem; font-weight: 700; }
+    .progress-track { height: .62rem; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.22); }
+    .progress-bar { width: 0; height: 100%; background: linear-gradient(90deg, #f2c75c, #79d2a4); transition: width .25s ease; }
+    .progress-number { min-width: 3.5rem; text-align: right; font-variant-numeric: tabular-nums; font-weight: 750; }
+
+    .shell { padding: 1.35rem 1.25rem 4rem; }
+    .quick-nav { display: flex; gap: .55rem; overflow-x: auto; padding: .15rem 0 1rem; scrollbar-width: thin; }
+    .quick-nav a { flex: 0 0 auto; padding: .48rem .72rem; color: var(--navy); background: #fff; border: 1px solid var(--line); border-radius: 999px; text-decoration: none; font-size: .9rem; font-weight: 650; }
+    .quick-nav a:hover { background: var(--blue-50); }
+
+    .orientation {
+      margin: .5rem 0 1.25rem; padding: clamp(1.15rem, 3vw, 1.8rem);
+      background: var(--paper); border: 2px solid var(--navy-2); border-radius: var(--radius); box-shadow: var(--shadow);
+    }
+    .orientation h2 { margin-top: 0; font-size: clamp(1.45rem, 3vw, 2rem); }
+    .orientation-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1rem; }
+    .orientation-card { padding: 1rem; background: var(--blue-50); border-radius: 11px; }
+    .orientation-card h3 { margin: 0 0 .35rem; font-size: 1.03rem; }
+    .orientation-card p { margin: 0; }
+    .mode-box { margin-top: 1rem; padding: 1rem; border-left: 5px solid var(--gold); background: #fff9e9; }
+    .mode-options { display: flex; flex-wrap: wrap; gap: .7rem 1.2rem; margin-top: .6rem; }
+    .mode-options label { display: inline-flex; align-items: center; gap: .45rem; font-weight: 700; }
+    input[type="radio"], input[type="checkbox"] { width: 1.2rem; height: 1.2rem; accent-color: var(--navy-2); }
+
+    details.section { margin: 1rem 0; overflow: clip; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 7px 20px rgba(24,52,79,.06); }
+    details.section > summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: .85rem; padding: 1rem 1.15rem; color: var(--navy); font-weight: 800; font-size: clamp(1.15rem, 2.5vw, 1.45rem); }
+    details.section > summary::-webkit-details-marker { display: none; }
+    details.section > summary::before { content: "+"; display: grid; place-items: center; width: 1.85rem; height: 1.85rem; flex: 0 0 auto; border-radius: 50%; color: #fff; background: var(--navy); font-size: 1.2rem; }
+    details.section[open] > summary::before { content: "−"; }
+    .section-content { padding: 0 1.2rem 1.35rem; }
+    .section-content h3 { margin: 1.2rem 0 .45rem; color: #263c51; }
+    .section-content > :first-child { margin-top: 0; }
+
+    .timeline { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: .75rem; margin: 1rem 0; }
+    .time-card { padding: .85rem; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+    .time-card strong { display: block; color: var(--navy); font-size: .92rem; }
+    .time-card span { display: block; margin-top: .25rem; }
+
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: .85rem; }
+    .field { display: grid; gap: .35rem; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { font-weight: 720; }
+    .field input, .field textarea {
+      width: 100%; padding: .72rem .78rem; color: var(--ink); background: #fff;
+      border: 1px solid #9eacb9; border-radius: 8px;
+    }
+    .field textarea { min-height: 6rem; resize: vertical; }
+    .field small { color: var(--muted); }
+
+    .responsive-table { overflow-x: auto; margin: .8rem 0 1.1rem; }
+    table { width: 100%; border-collapse: collapse; min-width: 640px; }
+    th, td { padding: .72rem .75rem; border: 1px solid var(--line); vertical-align: top; text-align: left; }
+    th { color: #fff; background: var(--navy); }
+    tbody tr:nth-child(even) { background: var(--blue-50); }
+    table input, table textarea { width: 100%; min-width: 7rem; padding: .5rem; border: 1px solid #9eacb9; border-radius: 6px; background: #fff; }
+    table textarea { min-height: 4.4rem; resize: vertical; }
+
+    .step-list { counter-reset: step; display: grid; gap: .75rem; padding: 0; list-style: none; }
+    .step-list li { position: relative; padding: .82rem .9rem .82rem 3.3rem; border-left: 4px solid var(--navy-2); background: var(--blue-50); border-radius: 0 9px 9px 0; }
+    .step-list li::before { counter-increment: step; content: counter(step); position: absolute; left: .75rem; top: .65rem; display: grid; place-items: center; width: 1.8rem; height: 1.8rem; border-radius: 50%; color: #fff; background: var(--navy); font-weight: 800; }
+    .check-list { display: grid; gap: .6rem; padding: 0; list-style: none; }
+    .check-list label { display: grid; grid-template-columns: auto 1fr; align-items: start; gap: .65rem; padding: .7rem .75rem; border: 1px solid var(--line); border-radius: 9px; background: #fff; }
+    .check-list input { margin-top: .13rem; }
+    .note { padding: .85rem 1rem; border-left: 5px solid var(--navy-2); background: var(--blue-50); }
+    .warning { border-left-color: var(--gold); background: #fff9e9; }
+    .deliverables { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: .75rem; }
+    .deliverable { padding: .9rem; border: 1px solid var(--line); border-radius: 10px; }
+    .deliverable strong { color: var(--navy); }
+
+    .references { padding-left: 1.25rem; }
+    .references li { margin-bottom: .85rem; }
+    .actions { position: sticky; bottom: .75rem; z-index: 10; display: flex; flex-wrap: wrap; justify-content: center; gap: .55rem; margin: 1.2rem auto 0; padding: .7rem; width: fit-content; max-width: 100%; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.96); box-shadow: var(--shadow); backdrop-filter: blur(8px); }
+    .btn { cursor: pointer; border: 1px solid var(--navy); border-radius: 999px; padding: .58rem .9rem; color: var(--navy); background: #fff; font-weight: 750; }
+    .btn.primary { color: #fff; background: var(--navy); }
+    .btn.danger { color: #8a1c1c; border-color: #bb6565; }
+    .status { min-height: 1.4rem; margin: .75rem 0 0; text-align: center; color: var(--success); font-weight: 700; }
+    footer { padding: 1.4rem; color: #e5eef6; background: #102f50; text-align: center; font-size: .9rem; }
+    footer p { max-width: 980px; margin: .25rem auto; }
+    footer .rights { color: #fff; font-weight: 750; }
+
+    @media (max-width: 780px) {
+      .orientation-grid, .form-grid, .timeline, .deliverables { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .progress-inner { grid-template-columns: 1fr auto; }
+      .progress-label { grid-column: 1 / -1; }
+      .actions { border-radius: 16px; }
+      .hero { padding-top: 1.7rem; }
+    }
+
+    @media print {
+      body { background: #fff; font-size: 10.5pt; }
+      .hero { color: #000; background: #fff; padding: 0 0 1rem; }
+      .hero .subtitle, .hero .author { color: #333; }
+      .pill { color: #000; border-color: #777; background: #fff; }
+      .progress-wrap, .quick-nav, .actions, .status { display: none !important; }
+      .shell { width: 100%; padding: 0; }
+      details.section { box-shadow: none; break-inside: avoid-page; }
+      details.section:not([open]) > *:not(summary) { display: block; }
+      details.section > summary::before { display: none; }
+      a { color: #000; text-decoration: none; }
+      .orientation { box-shadow: none; }
+      footer { color: #000; background: #fff; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">PPGCI UFC · Conteúdos Digitais e suas Técnicas de Produção e de Preservação</p>
+      <h1>Produção de vídeo interativo com Lumi</h1>
+      <p class="subtitle">Atividade prática simplificada para produção autoral, inserção de interações e preparação do objeto digital para uma futura aula sobre preservação.</p>
+      <p class="author">Profa. Dra. Andréa Soares Rocha da Silva</p>
+      <div class="hero-meta" aria-label="Características da atividade">
+        <span class="pill">Modalidade remota assíncrona</span>
+        <span class="pill">Individual ou em dupla</span>
+        <span class="pill">Carga de trabalho sugerida de 3 horas</span>
+        <span class="pill">Ferramenta Lumi Desktop</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="progress-wrap" aria-label="Progresso da atividade">
+    <div class="progress-inner">
+      <span class="progress-label">Etapas concluídas</span>
+      <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Percentual concluído">
+        <div class="progress-bar"></div>
+      </div>
+      <span class="progress-number">0%</span>
+    </div>
+  </div>
+
+  <main id="conteudo" class="shell">
+    <nav class="quick-nav" aria-label="Navegação rápida">
+      <a href="#orientacoes">Orientações</a>
+      <a href="#planejamento">Planejamento</a>
+      <a href="#producao">Produção</a>
+      <a href="#lumi">Lumi</a>
+      <a href="#teste">Teste</a>
+      <a href="#entrega">Entrega</a>
+      <a href="#documentacao">Documentação</a>
+      <a href="#referencias">Referências</a>
+    </nav>
+
+    <section id="orientacoes" class="orientation" aria-labelledby="titulo-orientacoes">
+      <h2 id="titulo-orientacoes">Orientações didáticas</h2>
+      <div class="orientation-grid">
+        <article class="orientation-card">
+          <h3>Modalidade da aula</h3>
+          <p>A atividade será realizada de forma <strong>remota e assíncrona</strong>. Não haverá encontro síncrono obrigatório. Organize um período aproximado de três horas para executar o roteiro no seu ritmo, respeitando o prazo informado no SIGAA.</p>
+        </article>
+        <article class="orientation-card">
+          <h3>Forma de realização</h3>
+          <p>Você pode realizar a atividade <strong>individualmente ou em dupla</strong>. Em dupla, os dois integrantes devem participar das decisões, revisar o produto e ser identificados nos arquivos entregues.</p>
+        </article>
+        <article class="orientation-card">
+          <h3>Preparação prévia</h3>
+          <p>Tenha um computador com o <strong>Lumi Desktop</strong> instalado, um celular ou computador para gravar e um meio para transferir o MP4. Não é necessário criar conta Lumi nem publicar o conteúdo na internet.</p>
+        </article>
+        <article class="orientation-card">
+          <h3>Comunicação e entrega</h3>
+          <p>Leia toda a atividade antes de começar. Use o espaço indicado pela professora no SIGAA para dúvidas e envie os quatro produtos solicitados até a data registrada no ambiente da disciplina.</p>
+        </article>
+      </div>
+
+      <div class="mode-box">
+        <strong>Como você realizará a atividade?</strong>
+        <div class="mode-options" role="radiogroup" aria-label="Forma de realização">
+          <label><input type="radio" name="modo" value="individual" data-save> Individualmente</label>
+          <label><input type="radio" name="modo" value="dupla" data-save> Em dupla</label>
+        </div>
+        <p id="mode-message" class="note" aria-live="polite">Selecione uma opção para adaptar as orientações.</p>
+      </div>
+
+      <h3>Distribuição sugerida das três horas</h3>
+      <div class="timeline">
+        <div class="time-card"><strong>0 a 20 min</strong><span>Ler as orientações, escolher o tema e preencher o plano.</span></div>
+        <div class="time-card"><strong>20 a 60 min</strong><span>Gravar e revisar um vídeo de 2 a 3 minutos.</span></div>
+        <div class="time-card"><strong>60 a 120 min</strong><span>Importar o MP4 e inserir três interações no Lumi.</span></div>
+        <div class="time-card"><strong>120 a 150 min</strong><span>Executar o vídeo, revisar e corrigir problemas.</span></div>
+        <div class="time-card"><strong>150 a 170 min</strong><span>Exportar e reabrir o arquivo .h5p.</span></div>
+        <div class="time-card"><strong>170 a 180 min</strong><span>Preencher a ficha e organizar a entrega.</span></div>
+      </div>
+      <label class="note"><input class="progress-check" type="checkbox" data-save> Li as orientações e escolhi a forma de realização.</label>
+    </section>
+
+    <details id="planejamento" class="section" open>
+      <summary>1 Planejamento e roteiro</summary>
+      <div class="section-content">
+        <p>Defina um tema relacionado à sua pesquisa, atuação profissional, conceito acadêmico, técnica ou processo. O vídeo deve ter <strong>2 a 3 minutos</strong> e ser compreensível sem explicações adicionais.</p>
+        <div class="form-grid">
+          <div class="field full">
+            <label for="autores">Autor ou autores</label>
+            <input id="autores" type="text" data-save placeholder="Nome completo de quem realizará a atividade">
+          </div>
+          <div class="field">
+            <label for="titulo">Título provisório</label>
+            <input id="titulo" type="text" data-save>
+          </div>
+          <div class="field">
+            <label for="publico">Público a que se destina</label>
+            <input id="publico" type="text" data-save>
+          </div>
+          <div class="field full">
+            <label for="objetivo">Objetivo do vídeo</label>
+            <textarea id="objetivo" data-save placeholder="Ao final do vídeo, espera-se que o público seja capaz de..."></textarea>
+          </div>
+        </div>
+
+        <h3>Estrutura do vídeo</h3>
+        <div class="responsive-table">
+          <table>
+            <thead><tr><th>Momento</th><th>O que será mostrado ou dito</th><th>Tempo previsto</th></tr></thead>
+            <tbody>
+              <tr><td>Abertura</td><td><textarea data-save aria-label="Conteúdo da abertura"></textarea></td><td><input data-save aria-label="Tempo da abertura"></td></tr>
+              <tr><td>Desenvolvimento</td><td><textarea data-save aria-label="Conteúdo do desenvolvimento"></textarea></td><td><input data-save aria-label="Tempo do desenvolvimento"></td></tr>
+              <tr><td>Encerramento</td><td><textarea data-save aria-label="Conteúdo do encerramento"></textarea></td><td><input data-save aria-label="Tempo do encerramento"></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Mapa das três interações</h3>
+        <div class="responsive-table">
+          <table>
+            <thead><tr><th>Tempo</th><th>Tipo</th><th>Conteúdo e função</th></tr></thead>
+            <tbody>
+              <tr><td><input data-save aria-label="Tempo da interação informativa"></td><td>Informação</td><td><textarea data-save aria-label="Conteúdo da interação informativa" placeholder="Texto, imagem ou explicação complementar"></textarea></td></tr>
+              <tr><td><input data-save aria-label="Tempo da questão"></td><td>Questão objetiva</td><td><textarea data-save aria-label="Conteúdo da questão" placeholder="Pergunta e feedback explicativo"></textarea></td></tr>
+              <tr><td><input data-save aria-label="Tempo da interação livre"></td><td>Escolha livre</td><td><textarea data-save aria-label="Conteúdo da interação livre" placeholder="Link, imagem, texto ou outra questão pertinente"></textarea></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="field">
+          <label for="fontes-planejamento">Fontes e materiais de terceiros</label>
+          <textarea id="fontes-planejamento" data-save placeholder="Registre autor, título, origem e licença, quando houver."></textarea>
+        </div>
+        <ul class="check-list">
+          <li><label><input class="progress-check" type="checkbox" data-save><span>Defini tema, público e objetivo.</span></label></li>
+          <li><label><input class="progress-check" type="checkbox" data-save><span>Planejei a abertura, o desenvolvimento e o encerramento.</span></label></li>
+          <li><label><input class="progress-check" type="checkbox" data-save><span>Defini as três interações antes de abrir o Lumi.</span></label></li>
+        </ul>
+      </div>
+    </details>
+
+    <details id="producao" class="section" open>
+      <summary>2 Produção do vídeo</summary>
+      <div class="section-content">
+        <p>Grave o vídeo com a câmera do celular ou do computador. Para caber no tempo previsto, prefira uma tomada contínua e evite edição audiovisual complexa.</p>
+        <ul class="check-list">
+          <li><label><input class="progress-check" type="checkbox" data-save><span>Fiz um teste curto de áudio, iluminação e enquadramento.</span></label></li>
+          <li><label><input class="progress-check" type="checkbox" data-save><span>Evitei dados pessoais, notificações e pessoas sem autorização.</span></label></li>
+          <li><label><input class="progress-check" type="checkbox" data-save><span>Assisti ao arquivo completo e salvei a versão escolhida em MP4.</span></label></li>
+        </ul>
+        <p class="note"><strong>Nome sugerido:</strong> SOBRENOME_tema_video_v01.mp4. Em dupla, usem um sobrenome de cada integrante ou um identificador combinado.</p>
+      </div>
+    </details>
+
+    <details id="lumi" class="section" open>
+      <summary>3 Criação do vídeo interativo no Lumi</summary>
+      <div class="section-content">
+        <ol class="step-list">
+          <li>Abra o Lumi Desktop e selecione a criação de um novo conteúdo.</li>
+          <li>Escolha o tipo <strong>Interactive Video</strong>.</li>
+          <li>Em <strong>Upload video</strong>, importe o MP4 e confirme imagem, áudio e duração.</li>
+          <li>Em <strong>Add interactions</strong>, localize os tempos marcados no roteiro e insira as três interações.</li>
+          <li>Na questão objetiva, escreva um feedback que explique a resposta. Evite apenas “correto” ou “incorreto”.</li>
+          <li>Ajuste duração, posição e pausa. Não cubra informações importantes do vídeo.</li>
+          <li>Visualize o conteúdo do início ao fim e faça as correções necessárias.</li>
+          <li>Salve e exporte o arquivo <strong>.h5p</strong>.</li>
+        </ol>
+        <p class="note warning"><strong>Summary task é facultativo.</strong> Não é necessário gerar HTML, publicar o conteúdo ou criar conta Lumi para concluir esta atividade.</p>
+        <ul class="check-list">
+          <li><label><input class="progress-check" type="checkbox" data-save><span>Importei o vídeo e inseri as três interações previstas.</span></label></li>
+          <li><label><input class="progress-check" type="checkbox" data-save><span>Configurei feedback explicativo na questão.</span></label></li>
+          <li><label><input class="progress-check" type="checkbox" data-save><span>Salvei e exportei o arquivo .h5p.</span></label></li>
+        </ul>
+      </div>
+    </details>
+
+    <details id="teste" class="section" open>
+      <summary>4 Teste e revisão</summary>
+      <div class="section-content">
+        <p id="test-guidance">Execute o vídeo como usuário e revise o produto sem depender de explicações adicionais.</p>
+        <ul class="check-list">
+          <li><label><input class="progress-check" type="checkbox" data-save><span>Vídeo e áudio estão compreensíveis.</span></label></li>
+          <li><label><input class="progress-check" type="checkbox" data-save><span>As interações aparecem no momento adequado.</span></label></li>
+          <li><label><input class="progress-check" type="checkbox" data-save><span>A pergunta e o feedback fazem sentido.</span></label></li>
+          <li><label><input class="progress-check" type="checkbox" data-save><span>Textos são legíveis e não cobrem a cena.</span></label></li>
+          <li><label><input class="progress-check" type="checkbox" data-save><span>O arquivo .h5p foi reaberto com sucesso no Lumi.</span></label></li>
+        </ul>
+      </div>
+    </details>
+
+    <details id="entrega" class="section" open>
+      <summary>5 Produtos a entregar</summary>
+      <div class="section-content">
+        <p>Reúna os quatro itens em uma única pasta denominada <strong>VIDEO_INTERATIVO_SEUNOME</strong> ou <strong>VIDEO_INTERATIVO_DUPLA</strong>.</p>
+        <div class="deliverables">
+          <div class="deliverable"><strong>1 Roteiro preenchido</strong><br>Planejamento do vídeo e mapa das três interações.</div>
+          <div class="deliverable"><strong>2 Vídeo base</strong><br>Arquivo autoral em formato MP4.</div>
+          <div class="deliverable"><strong>3 Vídeo interativo</strong><br>Arquivo exportado em formato .h5p.</div>
+          <div class="deliverable"><strong>4 Ficha simplificada</strong><br>Identificação, descrição, arquivos, fontes e questão de preservação.</div>
+        </div>
+        <p class="note"><strong>Não são exigidos:</strong> transcrição, arquivo HTML, publicação pública, registro detalhado de cada passo ou descrição técnica de codec e resolução.</p>
+        <label class="note"><input class="progress-check" type="checkbox" data-save> Organizei os quatro produtos para envio no SIGAA.</label>
+      </div>
+    </details>
+
+    <details id="documentacao" class="section" open>
+      <summary>6 Ficha simplificada de documentação</summary>
+      <div class="section-content">
+        <p>Preencha os dados mínimos que permitirão reconhecer o objeto e retomar seus arquivos na futura aula sobre preservação digital.</p>
+        <div class="form-grid">
+          <div class="field full"><label for="doc-titulo">Título do vídeo interativo</label><input id="doc-titulo" data-save></div>
+          <div class="field full"><label for="doc-autores">Autor ou autores</label><input id="doc-autores" data-save></div>
+          <div class="field"><label for="doc-data">Data de criação</label><input id="doc-data" type="date" data-save></div>
+          <div class="field"><label for="doc-versao">Versão</label><input id="doc-versao" data-save placeholder="Exemplo: v01"></div>
+          <div class="field full"><label for="doc-descricao">Descrição resumida</label><textarea id="doc-descricao" data-save></textarea></div>
+          <div class="field full"><label for="doc-palavras">Três a cinco palavras-chave</label><input id="doc-palavras" data-save></div>
+          <div class="field full"><label for="doc-arquivos">Nomes dos arquivos entregues</label><textarea id="doc-arquivos" data-save></textarea></div>
+          <div class="field"><label for="doc-software">Software</label><input id="doc-software" data-save value="Lumi Desktop"></div>
+          <div class="field"><label for="doc-software-versao">Versão do Lumi</label><input id="doc-software-versao" data-save></div>
+          <div class="field full"><label for="doc-fontes">Fontes, créditos e licenças</label><textarea id="doc-fontes" data-save></textarea></div>
+          <div class="field full"><label for="doc-preservacao">Se apenas o MP4 fosse preservado, o que deixaria de existir ou funcionar?</label><textarea id="doc-preservacao" data-save></textarea></div>
+        </div>
+        <label class="note"><input class="progress-check" type="checkbox" data-save> Preenchi a ficha e conferi os nomes dos arquivos.</label>
+      </div>
+    </details>
+
+    <details id="referencias" class="section" open>
+      <summary>7 Referências e tutoriais abertos</summary>
+      <div class="section-content">
+        <p>Use as três primeiras fontes durante a execução. As demais apoiam decisões de produção, design e acessibilidade.</p>
+        <ol class="references">
+          <li>H5P GROUP. <strong>Interactive Video Tutorial</strong>. Tutorial oficial para criação e configuração das interações. Disponível em: <a href="https://h5p.org/tutorial-interactive-video" target="_blank" rel="noopener">h5p.org/tutorial-interactive-video</a>.</li>
+          <li>H5P GROUP. <strong>Tutorials for authors</strong>. Tutoriais dos tipos de questões e demais componentes. Disponível em: <a href="https://h5p.org/documentation/for-authors/tutorials" target="_blank" rel="noopener">h5p.org/documentation/for-authors/tutorials</a>.</li>
+          <li>LUMI EDUCATION. <strong>Lumi Education</strong>. Página oficial para acesso ao editor e à documentação. Disponível em: <a href="https://lumi.education/en/" target="_blank" rel="noopener">lumi.education</a>.</li>
+          <li>BRAME, Cynthia J. Effective educational videos: principles and guidelines for maximizing student learning from video content. <strong>CBE Life Sciences Education</strong>, v. 15, n. 4, es6, 2016. DOI: 10.1187/cbe.16-03-0125. Disponível em: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5132380/" target="_blank" rel="noopener">PubMed Central</a>.</li>
+          <li>OU, Chaohua; JOYNER, David A.; GOEL, Ashok K. Designing and developing videos for online learning: a seven-principle model. <strong>Online Learning</strong>, v. 23, n. 2, 2019. DOI: 10.24059/olj.v23i2.1449. Disponível em: <a href="https://olj.onlinelearningconsortium.org/index.php/olj/article/view/1449" target="_blank" rel="noopener">Online Learning</a>.</li>
+          <li>WORLD WIDE WEB CONSORTIUM. <strong>Planning Audio and Video Media</strong>. Disponível em: <a href="https://www.w3.org/WAI/media/av/planning/" target="_blank" rel="noopener">W3C Web Accessibility Initiative</a>.</li>
+        </ol>
+        <p class="note"><strong>Observação:</strong> os rótulos podem variar conforme a versão ou o idioma do Lumi. Preserve a sequência geral: importar o MP4, inserir interações, testar, salvar e exportar o arquivo .h5p.</p>
+      </div>
+    </details>
+
+    <div class="actions" aria-label="Ações do material">
+      <button class="btn primary" type="button" id="save-btn">Salvar respostas</button>
+      <button class="btn" type="button" id="download-btn">Baixar respostas</button>
+      <button class="btn" type="button" id="print-btn">Imprimir ou salvar em PDF</button>
+      <button class="btn danger" type="button" id="reset-btn">Limpar preenchimento</button>
+    </div>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+  </main>
+
+  <footer>
+    <p>Universidade Federal do Ceará · Programa de Pós-Graduação em Ciência da Informação</p>
+    <p class="rights">© 2026 Profa. Dra. Andréa Soares Rocha da Silva. Todos os direitos reservados.</p>
+    <p>Material de uso restrito às atividades da disciplina “Conteúdos Digitais e suas Técnicas de Produção e de Preservação”. Não é permitida a reprodução, a distribuição ou a utilização fora desse contexto sem autorização expressa da autora.</p>
+  </footer>
+
+  <script>
+    (() => {
+      "use strict";
+      const storageKey = "ppgci-lumi-atividade-v1";
+      const fields = [...document.querySelectorAll("[data-save]")];
+      const checks = [...document.querySelectorAll(".progress-check")];
+      const status = document.getElementById("status");
+      const bar = document.querySelector(".progress-bar");
+      const track = document.querySelector(".progress-track");
+      const number = document.querySelector(".progress-number");
+      const modeMessage = document.getElementById("mode-message");
+      const testGuidance = document.getElementById("test-guidance");
+
+      fields.forEach((field, index) => {
+        if (!field.id && field.type !== "radio") field.dataset.key = `field-${index}`;
+      });
+
+      const keyFor = (field) => field.id || field.dataset.key || (field.name ? `${field.name}-${field.value}` : "");
+
+      function snapshot() {
+        const data = {};
+        fields.forEach(field => {
+          const key = keyFor(field);
+          if (!key) return;
+          if (field.type === "checkbox" || field.type === "radio") data[key] = field.checked;
+          else data[key] = field.value;
+        });
+        return data;
+      }
+
+      function save(showMessage = false) {
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(snapshot()));
+          if (showMessage) announce("Respostas salvas neste navegador.");
+        } catch (_) {
+          announce("Não foi possível salvar automaticamente. Use Baixar respostas ou Imprimir.", true);
+        }
+      }
+
+      function restore() {
+        try {
+          const raw = localStorage.getItem(storageKey);
+          if (!raw) return;
+          const data = JSON.parse(raw);
+          fields.forEach(field => {
+            const key = keyFor(field);
+            if (!(key in data)) return;
+            if (field.type === "checkbox" || field.type === "radio") field.checked = Boolean(data[key]);
+            else field.value = data[key];
+          });
+        } catch (_) {
+          announce("O preenchimento anterior não pôde ser recuperado.", true);
+        }
+      }
+
+      function updateProgress() {
+        const done = checks.filter(check => check.checked).length;
+        const percent = checks.length ? Math.round((done / checks.length) * 100) : 0;
+        bar.style.width = `${percent}%`;
+        track.setAttribute("aria-valuenow", String(percent));
+        number.textContent = `${percent}%`;
+      }
+
+      function updateMode() {
+        const selected = document.querySelector('input[name="modo"]:checked')?.value;
+        if (selected === "dupla") {
+          modeMessage.textContent = "Em dupla: dividam tarefas, mas tomem juntos as decisões de conteúdo e revisem o produto final. Identifiquem os dois autores na entrega.";
+          testGuidance.textContent = "Cada integrante deve testar o vídeo completo. Se possível, peçam ainda a outra pessoa que o execute sem explicações prévias.";
+        } else if (selected === "individual") {
+          modeMessage.textContent = "Individualmente: organize as três horas em blocos e faça uma pausa breve antes do teste final para revisar o material com novo olhar.";
+          testGuidance.textContent = "Execute o vídeo como usuário, sem consultar o roteiro durante o teste. Faça uma pausa breve antes da revisão final.";
+        } else {
+          modeMessage.textContent = "Selecione uma opção para adaptar as orientações.";
+          testGuidance.textContent = "Execute o vídeo como usuário e revise o produto sem depender de explicações adicionais.";
+        }
+      }
+
+      function announce(message, error = false) {
+        status.textContent = message;
+        status.style.color = error ? "#8a1c1c" : "#1f7a52";
+        window.clearTimeout(announce.timer);
+        announce.timer = window.setTimeout(() => { status.textContent = ""; }, 5000);
+      }
+
+      function textExport() {
+        const value = (id) => document.getElementById(id)?.value?.trim() || "Não preenchido";
+        const mode = document.querySelector('input[name="modo"]:checked')?.value || "Não selecionado";
+        const completed = checks.filter(check => check.checked).map(check => check.parentElement.textContent.trim());
+        return [
+          "ATIVIDADE PRÁTICA DE VÍDEO INTERATIVO COM LUMI",
+          "",
+          `Forma de realização: ${mode}`,
+          `Autor ou autores: ${value("autores")}`,
+          `Título provisório: ${value("titulo")}`,
+          `Público: ${value("publico")}`,
+          `Objetivo: ${value("objetivo")}`,
+          "",
+          "FICHA SIMPLIFICADA",
+          `Título: ${value("doc-titulo")}`,
+          `Autores: ${value("doc-autores")}`,
+          `Data: ${value("doc-data")}`,
+          `Versão: ${value("doc-versao")}`,
+          `Descrição: ${value("doc-descricao")}`,
+          `Palavras-chave: ${value("doc-palavras")}`,
+          `Arquivos: ${value("doc-arquivos")}`,
+          `Software: ${value("doc-software")} ${value("doc-software-versao")}`,
+          `Fontes e licenças: ${value("doc-fontes")}`,
+          `Questão de preservação: ${value("doc-preservacao")}`,
+          "",
+          "ETAPAS MARCADAS COMO CONCLUÍDAS",
+          completed.length ? completed.map(item => `- ${item}`).join("\n") : "Nenhuma etapa marcada."
+        ].join("\n");
+      }
+
+      function downloadResponses() {
+        const blob = new Blob([textExport()], { type: "text/plain;charset=utf-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "respostas_atividade_video_interativo.txt";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(link.href);
+        announce("Arquivo de respostas gerado.");
+      }
+
+      fields.forEach(field => {
+        field.addEventListener("input", () => { save(false); updateProgress(); updateMode(); });
+        field.addEventListener("change", () => { save(false); updateProgress(); updateMode(); });
+      });
+      document.getElementById("save-btn").addEventListener("click", () => save(true));
+      document.getElementById("download-btn").addEventListener("click", downloadResponses);
+      document.getElementById("print-btn").addEventListener("click", () => window.print());
+      document.getElementById("reset-btn").addEventListener("click", () => {
+        if (!window.confirm("Deseja apagar todo o preenchimento salvo neste navegador?")) return;
+        fields.forEach(field => {
+          if (field.type === "checkbox" || field.type === "radio") field.checked = false;
+          else if (field.id !== "doc-software") field.value = "";
+        });
+        document.getElementById("doc-software").value = "Lumi Desktop";
+        localStorage.removeItem(storageKey);
+        updateProgress();
+        updateMode();
+        announce("Preenchimento apagado.");
+      });
+
+      restore();
+      updateProgress();
+      updateMode();
+    })();
+  </script>
+</body>
+</html>
